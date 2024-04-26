@@ -1,0 +1,75 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: beforejob
+spec:
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: slack-notification
+        image: curlimages/curl
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            echo -e "Starting pre sync job at $(date). \n"
+            curl -s https://slack.com/api/chat.postMessage \
+            -X POST -d '{"channel": "test-ashish"}' -d '{"text": "Job Starting."}' \
+            -H 'Authorization: Bearer xoxb-'
+            echo
+            echo -e "Complete pre sync job at $(date). \n"              
+  backoffLimit: 0
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mycronjob
+  annotations:
+    argocd.argoproj.io/ignore: "true"  
+spec:
+  schedule: "*/2 * * * *"
+  startingDeadlineSeconds: 60
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: mycronjob
+            image: busybox:1.28
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - date; echo Hello from the Kubernetes cluster; sleep 60; date
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: afterjob
+spec:
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      containers:
+      - name: slack-notification
+        image: curlimages/curl
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            echo -e "Starting post sync job at $(date). \n"
+            curl -s https://slack.com/api/chat.postMessage \
+            -X POST -d '{"channel": "test-ashish"}' -d '{"text": "Job Finished."}' \
+            -H 'Authorization: Bearer xoxb-'
+            echo
+            echo -e "Complete post sync job at $(date). \n"      
+      restartPolicy: Never
+  backoffLimit: 0
+  dependsOn:
+  - name: mycronjob
+    condition: Complete
+  - name: mycronjob
+    condition: Failed  

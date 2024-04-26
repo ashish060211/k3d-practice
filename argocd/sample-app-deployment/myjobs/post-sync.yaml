@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: after
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      # containers:
+      # - name: sleep
+      #   image: alpine:latest
+      #   command: ["echo", "post-sync"]
+      containers:
+      - name: slack-notification
+        image: curlimages/curl
+        command:
+          - "curl"
+          - "-d 'text=Job Finished.'"
+          - "-d 'channel=test-ashish'"
+          - "-H 'Authorization: Bearer xoxb-'"
+          - "-X POST https://slack.com/api/chat.postMessage"   
+      restartPolicy: Never
+  backoffLimit: 0

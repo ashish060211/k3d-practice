@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: before
+  annotations:
+    argocd.argoproj.io/ignore: "true"      
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: slack-notification
+        image: curlimages/curl
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            echo -e "Starting pre sync job at $(date). \n"
+            curl -s https://slack.com/api/chat.postMessage -X POST -d "channel=test-ashish" -d "text=Job Start." -H "Authorization: Bearer xoxb-$API_KEY"
+            echo
+            echo -e "Complete pre sync job at $(date). \n"      
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: my-api-secret
+              key: api_key                    
+  backoffLimit: 1

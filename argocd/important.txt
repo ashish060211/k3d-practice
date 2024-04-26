@@ -1,0 +1,43 @@
+get argocd password --> kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
+K3WtnHaqf9qb6svS
+
+kubectl port-forward argocd-server-cd747d9d7-blr57  -n argocd 8080:8080
+https://localhost:8080/
+
+# https://medium.com/@chirayukapoor/running-argo-cd-locally-with-kind-and-nginx-ingress-26b31cece300
+
+https://github.com/AmwayACS/argo-practice
+kubectl apply -f bgd-app.yaml
+git@github.com:AmwayACS/argo-practice.git
+git@github.com:ashishamway/sample-app-deployment.git
+
+$ argocd app create myapp --repo https://github.com/ashish060211/k3d-practice --path . --dest-server https://kubernetes.default.svc --dest-namespace default
+$ argocd repo list
+$ argocd app list
+
+ashish@IN-4T24GK3:~/amway/k38-practice/argocd/sample-app$ sudo cat /etc/resolv.conf
+[sudo] password for ashish:
+nameserver 192.168.29.1
+
+$ ipconfig /all <-- run on dos. Find DNS entry from window command and add it to /etc/resolv.conf file of ubuntu using its terminal. Restart then ping google.com to validate.
+$ kubectl edit configmap coredns -n kube-system
+forward . /etc/resolv.conf
+$ kubectl -n kube-system edit configmap coredns
+$ When I am inside amway vpn, connect to outter world from pod does not work.
+
+$ argocd app get myapp
+$ argocd app sync myapp
+$ kubectl run curl --rm -it --restart=Never --image=curlimages/curl --command -- curl -v http://10.42.2.49:8083
+$ argocd app diff myapp --refresh
+$ argocd app sync myapp && argocd app wait myapp  <-- Use the following command to synchronize your application and wait until the change is fully rolled out, and the application is ready for testing.
+
+$ kubectl run -it --rm test-pod --image=curlimages/curl --restart=Never -- sh
+$ pods=$(kubectl get pods --selector=batch.kubernetes.io/job-name=pi --output=jsonpath='{.items[*].metadata.name}')
+$ kubectl apply --dry-run=client --validate -f /tmp/kubectl-edit-2259712267.yaml
+$ kubectl create secret generic my-api-secret   --from-literal=api_key= 
+$ kubectl logs $(kubectl get pods --selector=job-name=helloworld -o=jsonpath='{.items[0].metadata.name}')
+
+$ kubectl patch cronjobs helloworld -p '{"spec" : {"suspend" : true }}'
+$ kubectl exec --stdin --tty job/demo-cron-1649867400 -- sh
+$ kubectl port-forward $(kubectl get pods --selector=app.kubernetes.io/name=argocd-server -o=jsonpath='{.items[0].metadata.name}' --namespace=argocd)  -n argocd 8080:8080
+

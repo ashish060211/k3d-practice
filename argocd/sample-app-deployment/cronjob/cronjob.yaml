@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: helloworld
+  # annotations:
+  #   argocd.argoproj.io/ignore: "true"  
+spec:
+  schedule: "*/2 * * * *"
+  concurrencyPolicy: Replace
+  failedJobsHistoryLimit: 10
+  successfulJobsHistoryLimit: 10
+  jobTemplate:
+    metadata:
+      labels: 
+        cronjob: helloworld
+    spec:
+      backoffLimit: 1
+      template:
+        metadata:
+          labels: 
+            cronjob: helloworld
+        spec:
+          containers:
+          - name: helloworld
+            image: busybox:1.28
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - date; echo Hello from the Kubernetes cluster; sleep 10; date; random_number=$((RANDOM % 3 + 1)); if [ $random_number -eq 3 ]; then exit 1; else exit 0; fi
+          restartPolicy: Never

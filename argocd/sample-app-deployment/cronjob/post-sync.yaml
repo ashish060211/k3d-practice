@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: after
+  annotations:
+    argocd.argoproj.io/ignore: "true"  
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: slack-notification
+        image: curlimages/curl
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            echo -e "Starting post sync job at $(date). \n"
+            curl -s https://slack.com/api/chat.postMessage -X POST -d "channel=test-ashish" -d "text=Job Finished." -H "Authorization: Bearer xoxb-$API_KEY"
+            echo
+            echo -e "Complete post sync job at $(date). \n"      
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: my-api-secret
+              key: api_key
+      restartPolicy: Never
+  backoffLimit: 0

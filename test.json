@@ -1,0 +1,60 @@
+{
+    "apiVersion": "networking.istio.io/v1alpha3",
+    "kind": "EnvoyFilter",
+    "metadata": {
+        "annotations": {},
+        "labels": {
+            "argocd.argoproj.io/instance": "purchase-global-dev-tier2"
+        },
+        "name": "purchase-global-dev-opa-authz-envoyfilter",
+        "namespace": "purchase-global-dev"
+    },
+    "spec": {
+        "configPatches": [
+            {
+                "applyTo": "HTTP_FILTER",
+                "match": {
+                    "context": "SIDECAR_INBOUND",
+                    "listener": {
+                        "filterChain": {
+                            "filter": {
+                                "name": "envoy.filters.network.http_connection_manager",
+                                "subFilter": {
+                                    "name": "envoy.filters.http.router"
+                                }
+                            }
+                        }
+                    }
+                },
+                "patch": {
+                    "operation": "INSERT_BEFORE",
+                    "value": {
+                        "name": "envoy.ext_authz",
+                        "typed_config": {
+                            "@type": "type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz",
+                            "grpc_service": {
+                                "google_grpc": {
+                                    "stat_prefix": "ext_authz",
+                                    "target_uri": "127.0.0.1:9191"
+                                }
+                            },
+                            "status_on_error": {
+                                "code": "ServiceUnavailable"
+                            },
+                            "transport_api_version": "V3",
+                            "with_request_body": {
+                                "allow_partial_message": true,
+                                "max_request_bytes": 8192
+                            }
+                        }
+                    }
+                }
+            }
+        ],
+        "workloadSelector": {
+            "labels": {
+                "opa-authz": "enabled"
+            }
+        }
+    }
+}

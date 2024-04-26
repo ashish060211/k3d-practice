@@ -1,0 +1,15 @@
+metadata:
+  managedFields:
+  name: myapp
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: app1/
+    repoURL: https://github.com/ashish060211/k3d-practice.git
+  syncPolicy:
+    syncOptions:
+    - PruneLast=true

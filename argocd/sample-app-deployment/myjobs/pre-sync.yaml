@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: before
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      restartPolicy: Never
+      # containers:
+      # - name: sleep
+      #   image: alpine:latest
+      #   command: ["echo", "pre-sync"]
+      containers:
+      - name: slack-notification
+        image: curlimages/curl
+        command:
+          - "curl"
+          - "-d 'text=Job Starting.'"
+          - "-d 'channel=test-ashish'"
+          - "-H 'Authorization: Bearer xoxb-'"
+          - "-X POST https://slack.com/api/chat.postMessage"         
+  backoffLimit: 1

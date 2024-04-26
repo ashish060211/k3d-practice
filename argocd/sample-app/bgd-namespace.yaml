@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bgd
+spec: {}
+status: {}
+#https://redhat-scholars.github.io/argocd-tutorial/argocd-tutorial/02-getting_started.html#deploy_sample_application
