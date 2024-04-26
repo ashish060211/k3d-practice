@@ -1,0 +1,784 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 138,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "green",
+              "mode": "fixed"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "color-text"
+              },
+              "filterable": false,
+              "inspect": true
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Fail Count"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "dark-red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 15,
+          "x": 0,
+          "y": 0
+        },
+        "id": 8,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "app_kubernetes_io_component"
+            }
+          ]
+        },
+        "pluginVersion": "10.0.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "kube_cronjob_info{cluster=\"$cluster\", namespace=~\"$namespace\"}",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "kube_cronjob_spec_successful_job_history_limit{cluster=\"$cluster\", namespace=~\"$namespace\"}",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "kube_cronjob_spec_failed_job_history_limit{cluster=\"$cluster\", namespace=~\"$namespace\"}",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "C"
+          }
+        ],
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "cronjob",
+              "mode": "inner"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time 1": true,
+                "Time 2": true,
+                "Time 3": true,
+                "Value #B": true,
+                "__name__ 1": true,
+                "__name__ 2": true,
+                "__name__ 3": true,
+                "app_kubernetes_io_component 1": true,
+                "app_kubernetes_io_component 2": true,
+                "app_kubernetes_io_component 3": true,
+                "app_kubernetes_io_instance 1": true,
+                "app_kubernetes_io_instance 2": true,
+                "app_kubernetes_io_instance 3": true,
+                "app_kubernetes_io_managed_by 1": true,
+                "app_kubernetes_io_managed_by 2": true,
+                "app_kubernetes_io_managed_by 3": true,
+                "app_kubernetes_io_name 1": true,
+                "app_kubernetes_io_name 2": true,
+                "app_kubernetes_io_name 3": true,
+                "app_kubernetes_io_part_of 1": true,
+                "app_kubernetes_io_part_of 2": true,
+                "app_kubernetes_io_part_of 3": true,
+                "app_kubernetes_io_version 1": true,
+                "app_kubernetes_io_version 2": true,
+                "app_kubernetes_io_version 3": true,
+                "cluster 1": true,
+                "cluster 2": true,
+                "cluster 3": true,
+                "helm_sh_chart 1": true,
+                "helm_sh_chart 2": true,
+                "helm_sh_chart 3": true,
+                "instance 1": true,
+                "instance 3": true,
+                "job 1": true,
+                "job 2": true,
+                "job 3": true,
+                "namespace 2": true,
+                "namespace 3": true,
+                "pod 1": true,
+                "pod 2": true,
+                "pod 3": true,
+                "pod_template_hash 1": true,
+                "pod_template_hash 2": true,
+                "pod_template_hash 3": true
+              },
+              "indexByName": {
+                "Time 1": 7,
+                "Time 2": 22,
+                "Time 3": 36,
+                "Value #A": 5,
+                "Value #B": 21,
+                "Value #C": 6,
+                "__name__ 1": 8,
+                "__name__ 2": 23,
+                "__name__ 3": 37,
+                "app_kubernetes_io_component 1": 9,
+                "app_kubernetes_io_component 2": 24,
+                "app_kubernetes_io_component 3": 38,
+                "app_kubernetes_io_instance 1": 10,
+                "app_kubernetes_io_instance 2": 25,
+                "app_kubernetes_io_instance 3": 39,
+                "app_kubernetes_io_managed_by 1": 11,
+                "app_kubernetes_io_managed_by 2": 26,
+                "app_kubernetes_io_managed_by 3": 40,
+                "app_kubernetes_io_name 1": 12,
+                "app_kubernetes_io_name 2": 27,
+                "app_kubernetes_io_name 3": 41,
+                "app_kubernetes_io_part_of 1": 13,
+                "app_kubernetes_io_part_of 2": 28,
+                "app_kubernetes_io_part_of 3": 42,
+                "app_kubernetes_io_version 1": 14,
+                "app_kubernetes_io_version 2": 29,
+                "app_kubernetes_io_version 3": 43,
+                "cluster 1": 15,
+                "cluster 2": 30,
+                "cluster 3": 44,
+                "concurrency_policy": 2,
+                "cronjob": 0,
+                "helm_sh_chart 1": 16,
+                "helm_sh_chart 2": 31,
+                "helm_sh_chart 3": 45,
+                "instance 1": 17,
+                "instance 2": 4,
+                "instance 3": 46,
+                "job 1": 18,
+                "job 2": 32,
+                "job 3": 47,
+                "namespace 1": 3,
+                "namespace 2": 33,
+                "namespace 3": 48,
+                "pod 1": 19,
+                "pod 2": 34,
+                "pod 3": 49,
+                "pod_template_hash 1": 20,
+                "pod_template_hash 2": 35,
+                "pod_template_hash 3": 50,
+                "schedule": 1
+              },
+              "renameByName": {
+                "Value #A": "Successful Count",
+                "Value #C": "Fail Count",
+                "concurrency_policy": "Concurrency Policy",
+                "cronjob": "CronJob Name",
+                "instance 2": "Instance",
+                "namespace 1": "Namespace",
+                "schedule": "Schedule"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "color-text"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 5
+        },
+        "id": 7,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "10.0.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "kube_job_status_completion_time{cluster=\"$cluster\", namespace=~\"$namespace\"}",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "  topk(1, sort_desc(kube_job_status_completion_time{cluster=\"$cluster\", namespace=~\"$namespace\"}))\r\n-\r\n  (\r\n      kube_job_status_start_time\r\n    and on (job_name)\r\n      topk(1, sort_desc(kube_job_status_completion_time{cluster=\"$cluster\", namespace=~\"$namespace\"}))\r\n  )",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "job_name",
+              "mode": "inner"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time 1": true,
+                "Time 2": true,
+                "Value #B": false,
+                "__name__": true,
+                "app_kubernetes_io_component 1": true,
+                "app_kubernetes_io_component 2": true,
+                "app_kubernetes_io_instance 1": true,
+                "app_kubernetes_io_instance 2": true,
+                "app_kubernetes_io_managed_by 1": true,
+                "app_kubernetes_io_managed_by 2": true,
+                "app_kubernetes_io_name 1": true,
+                "app_kubernetes_io_name 2": true,
+                "app_kubernetes_io_part_of 1": true,
+                "app_kubernetes_io_part_of 2": true,
+                "app_kubernetes_io_version 1": true,
+                "app_kubernetes_io_version 2": true,
+                "cluster 1": true,
+                "cluster 2": true,
+                "helm_sh_chart 1": true,
+                "helm_sh_chart 2": true,
+                "instance 1": true,
+                "instance 2": true,
+                "job 1": true,
+                "job 2": true,
+                "namespace 1": true,
+                "namespace 2": true,
+                "pod 1": true,
+                "pod 2": true,
+                "pod_template_hash 1": true,
+                "pod_template_hash 2": true
+              },
+              "indexByName": {
+                "Time 1": 3,
+                "Time 2": 18,
+                "Value #A": 2,
+                "Value #B": 1,
+                "__name__": 4,
+                "app_kubernetes_io_component 1": 5,
+                "app_kubernetes_io_component 2": 19,
+                "app_kubernetes_io_instance 1": 6,
+                "app_kubernetes_io_instance 2": 20,
+                "app_kubernetes_io_managed_by 1": 7,
+                "app_kubernetes_io_managed_by 2": 21,
+                "app_kubernetes_io_name 1": 8,
+                "app_kubernetes_io_name 2": 22,
+                "app_kubernetes_io_part_of 1": 9,
+                "app_kubernetes_io_part_of 2": 23,
+                "app_kubernetes_io_version 1": 10,
+                "app_kubernetes_io_version 2": 24,
+                "cluster 1": 11,
+                "cluster 2": 25,
+                "helm_sh_chart 1": 12,
+                "helm_sh_chart 2": 26,
+                "instance 1": 13,
+                "instance 2": 27,
+                "job 1": 14,
+                "job 2": 28,
+                "job_name": 0,
+                "namespace 1": 15,
+                "namespace 2": 29,
+                "pod 1": 16,
+                "pod 2": 30,
+                "pod_template_hash 1": 17,
+                "pod_template_hash 2": 31
+              },
+              "renameByName": {
+                "Value #A": "Time Taken(Seconds)",
+                "Value #B": "Completed Time1",
+                "job_name": "Job Name"
+              }
+            }
+          },
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "Completed Time2",
+              "binary": {
+                "left": "Completed Time1",
+                "operator": "*",
+                "reducer": "sum",
+                "right": "1000"
+              },
+              "mode": "binary",
+              "reduce": {
+                "reducer": "sum"
+              }
+            }
+          },
+          {
+            "id": "convertFieldType",
+            "options": {
+              "conversions": [
+                {
+                  "destinationType": "time",
+                  "targetField": "Completed Time2"
+                }
+              ],
+              "fields": {}
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Completed Time1": true
+              },
+              "indexByName": {
+                "Completed Time1": 2,
+                "Completed Time2": 1,
+                "Job Name": 0,
+                "Time Taken(Seconds)": 3
+              },
+              "renameByName": {
+                "Completed Time2": "Completed At"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "noValue": "0",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 3,
+          "x": 12,
+          "y": 5
+        },
+        "id": 3,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "10.0.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(kube_job_status_active{namespace=~\"$namespace\",cluster=~\"$cluster\"}) by (namespace)",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{label_value}}",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Jobs Active",
+        "transformations": [
+          {
+            "id": "filterByValue",
+            "options": {
+              "filters": [
+                {
+                  "config": {
+                    "id": "greater",
+                    "options": {
+                      "value": 0
+                    }
+                  },
+                  "fieldName": "Value"
+                }
+              ],
+              "match": "all",
+              "type": "include"
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "green",
+              "mode": "fixed"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "color-text"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "noValue": "No Data Found",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 15,
+          "x": 0,
+          "y": 13
+        },
+        "id": 5,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": [],
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "10.0.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "kube_job_status_failed",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "__name__": true,
+                "app_kubernetes_io_component": true,
+                "app_kubernetes_io_instance": true,
+                "app_kubernetes_io_managed_by": true,
+                "app_kubernetes_io_name": true,
+                "app_kubernetes_io_part_of": true,
+                "app_kubernetes_io_version": true,
+                "cluster": true,
+                "helm_sh_chart": true,
+                "instance": true,
+                "job": true,
+                "pod": true,
+                "pod_template_hash": true
+              },
+              "indexByName": {},
+              "renameByName": {
+                "job_name": "Job Name",
+                "namespace": "Namespace",
+                "reason": "Reason"
+              }
+            }
+          },
+          {
+            "id": "filterByValue",
+            "options": {
+              "filters": [
+                {
+                  "config": {
+                    "id": "greater",
+                    "options": {
+                      "value": 0
+                    }
+                  },
+                  "fieldName": "Value"
+                }
+              ],
+              "match": "any",
+              "type": "include"
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "AMP-Preprod",
+            "value": "AMP-Preprod"
+          },
+          "description": "AMP is the only one to use currently. It is aws based.",
+          "hide": 0,
+          "includeAll": false,
+          "label": "Input DataSource",
+          "multi": false,
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "queryValue": "",
+          "refresh": 1,
+          "regex": "/.*Preprod/",
+          "skipUrlSync": false,
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "Apse1NgComPreprod02EksCluster",
+            "value": "Apse1NgComPreprod02EksCluster"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "definition": "kube_namespace_created",
+          "hide": 0,
+          "includeAll": false,
+          "label": "Select Cluster",
+          "multi": false,
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "query": "kube_namespace_created",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/.*cluster=\"([^\"]*).*/",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": "(.*)",
+          "current": {
+            "selected": true,
+            "text": "cronjob-test",
+            "value": "cronjob-test"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "definition": "kube_pod_container_info{cluster=~\"$cluster\"}",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Namespace",
+          "multi": false,
+          "name": "namespace",
+          "options": [],
+          "query": {
+            "query": "kube_pod_container_info{cluster=~\"$cluster\"}",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/.*namespace=\"([^\"]*).*/",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PF393580A4D9CB5AD"
+          },
+          "filters": [],
+          "hide": 0,
+          "name": "Filters",
+          "skipUrlSync": false,
+          "type": "adhoc"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-12h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Ashish Cronjob Dashboard- WIP",
+    "uid": "cd32d966-cc18-4c05-bc54-31d48957d1ef",
+    "version": 25,
+    "weekStart": ""
+  }

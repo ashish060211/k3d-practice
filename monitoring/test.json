@@ -1,0 +1,124 @@
+{
+    "apiVersion": "apps/v1",
+    "kind": "DaemonSet",
+    "metadata": {
+        "annotations": {
+            "deprecated.daemonset.template.generation": "1",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"DaemonSet\",\"metadata\":{\"annotations\":{},\"labels\":{\"app.kubernetes.io/component\":\"exporter\",\"app.kubernetes.io/name\":\"node-exporter\"},\"name\":\"node-exporter\",\"namespace\":\"monitoring\"},\"spec\":{\"selector\":{\"matchLabels\":{\"app.kubernetes.io/component\":\"exporter\",\"app.kubernetes.io/name\":\"node-exporter\"}},\"template\":{\"metadata\":{\"labels\":{\"app.kubernetes.io/component\":\"exporter\",\"app.kubernetes.io/name\":\"node-exporter\"}},\"spec\":{\"containers\":[{\"args\":[\"--path.sysfs=/host/sys\",\"--path.rootfs=/host/root\",\"--no-collector.wifi\",\"--no-collector.hwmon\",\"--collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)\",\"--collector.netclass.ignored-devices=^(veth.*)$\"],\"image\":\"prom/node-exporter\",\"name\":\"node-exporter\",\"ports\":[{\"containerPort\":9100,\"protocol\":\"TCP\"}],\"resources\":{\"limits\":{\"cpu\":\"250m\",\"memory\":\"180Mi\"},\"requests\":{\"cpu\":\"102m\",\"memory\":\"180Mi\"}},\"volumeMounts\":[{\"mountPath\":\"/host/sys\",\"mountPropagation\":\"HostToContainer\",\"name\":\"sys\",\"readOnly\":true},{\"mountPath\":\"/host/root\",\"mountPropagation\":\"HostToContainer\",\"name\":\"root\",\"readOnly\":true}]}],\"volumes\":[{\"hostPath\":{\"path\":\"/sys\"},\"name\":\"sys\"},{\"hostPath\":{\"path\":\"/\"},\"name\":\"root\"}]}}}}\n"
+        },
+        "creationTimestamp": "2023-08-02T18:20:13Z",
+        "generation": 1,
+        "labels": {
+            "app.kubernetes.io/component": "exporter",
+            "app.kubernetes.io/name": "node-exporter"
+        },
+        "name": "node-exporter",
+        "namespace": "monitoring",
+        "resourceVersion": "1194261",
+        "uid": "574be6ff-91aa-439e-8ca2-bde52974618b"
+    },
+    "spec": {
+        "revisionHistoryLimit": 10,
+        "selector": {
+            "matchLabels": {
+                "app.kubernetes.io/component": "exporter",
+                "app.kubernetes.io/name": "node-exporter"
+            }
+        },
+        "template": {
+            "metadata": {
+                "creationTimestamp": null,
+                "labels": {
+                    "app.kubernetes.io/component": "exporter",
+                    "app.kubernetes.io/name": "node-exporter"
+                }
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "args": [
+                            "--path.sysfs=/host/sys",
+                            "--path.rootfs=/host/root",
+                            "--no-collector.wifi",
+                            "--no-collector.hwmon",
+                            "--collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)",
+                            "--collector.netclass.ignored-devices=^(veth.*)$"
+                        ],
+                        "image": "prom/node-exporter",
+                        "imagePullPolicy": "Always",
+                        "name": "node-exporter",
+                        "ports": [
+                            {
+                                "containerPort": 9100,
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {
+                            "limits": {
+                                "cpu": "250m",
+                                "memory": "180Mi"
+                            },
+                            "requests": {
+                                "cpu": "102m",
+                                "memory": "180Mi"
+                            }
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/host/sys",
+                                "mountPropagation": "HostToContainer",
+                                "name": "sys",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/host/root",
+                                "mountPropagation": "HostToContainer",
+                                "name": "root",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "terminationGracePeriodSeconds": 30,
+                "volumes": [
+                    {
+                        "hostPath": {
+                            "path": "/sys",
+                            "type": ""
+                        },
+                        "name": "sys"
+                    },
+                    {
+                        "hostPath": {
+                            "path": "/",
+                            "type": ""
+                        },
+                        "name": "root"
+                    }
+                ]
+            }
+        },
+        "updateStrategy": {
+            "rollingUpdate": {
+                "maxSurge": 0,
+                "maxUnavailable": 1
+            },
+            "type": "RollingUpdate"
+        }
+    },
+    "status": {
+        "currentNumberScheduled": 3,
+        "desiredNumberScheduled": 3,
+        "numberMisscheduled": 0,
+        "numberReady": 0,
+        "numberUnavailable": 3,
+        "observedGeneration": 1,
+        "updatedNumberScheduled": 3
+    }
+}

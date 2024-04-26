@@ -1,0 +1,151 @@
+kubectl create namespace monitoring
+kubectl create -f clusterRole.yaml
+kubectl create -f config-map.yaml
+kubectl create  -f prometheus-deployment.yaml 
+kubectl get deployments --namespace=monitoring
+kubectl get pods --namespace=monitoring
+kubectl port-forward $(kubectl get pods --selector=app=prometheus-server -o=jsonpath='{.items[0].metadata.name}' --namespace=monitoring) 9090:9090 -n monitoring
+kubectl create -f prometheus-service.yaml --namespace=monitoring
+http://localhost:9090/graph?g0.expr=&g0.tab=1&g0.stacked=0&g0.show_exemplars=0&g0.range_input=1h
+
+Kube state metrics is require.
+kubectl apply -f kube-state-metrics-configs/
+kubectl get deployments kube-state-metrics -n kube-system
+https://devopscube.com/setup-prometheus-monitoring-on-kubernetes/
+http://localhost:8902/?orgId=1
+
+
+time() - max(
+  kube_job_status_start_time
+  * ON(job_name) GROUP_RIGHT()
+    kube_job_labels{label_cronjob="app.kubernetes.io/instance=cronapp"}
+    * ON(job_name) GROUP_RIGHT()
+      label_replace(kube_pod_labels, "job_name", "$1", "label_job_name", "(.*)")
+      * ON(pod) GROUP_RIGHT()
+        kube_pod_status_phase{job="kube-state-metrics",phase=~"Succeeded"}
+  )
+  BY (job_name, label_cronjob)
+
+k exec -it grafana-68b7b49968-grj7t -n monitoring -- /sh
+grafana-cli --homepath "/usr/share/grafana" admin reset-admin-password Admin@123
+
+
+count(kube_job_complete{namespace="default",job_name=~"(helloworld.*)"}) 
+kube_pod_info{created_by_kind="Job"}
+kube_job_labels{job_name=~"hello-.*"}
+kube_job_created
+kube_pod_created{namespace="default",pod="helloworld-28184436-5fd6l",uid="59972f63-6ce8-4d1c-86e3-6dc1153d64d4"} 1.69106616e+09
+kube_pod_info
+kube_pod_labels
+kube_pod_start_time
+kube_pod_status_phase
+kube_pod_status_scheduled
+kube_pod_status_scheduled_time
+kube_pod_status_ready{namespace="default",condition="true"} * on (namespace, pod) group_left(label_cronjob) kube_pod_labels
+https://grafana.com/solutions/kubernetes/#metrics-alerting-rules
+
+max without (owner_name) (
+  label_replace(
+clamp_max(
+  max by (namespace, owner_name, job_name) (
+    max by (namespace, owner_name, job_name) (
+      kube_job_status_start_time
+      *
+      on (job_name, namespace) group_left(owner_name) max by (namespace, owner_name, job_name) (kube_job_owner{owner_kind="CronJob"})
+    )
+    ==
+    on (namespace, owner_name) group_left max by (namespace, owner_name) (
+      kube_job_status_start_time
+      *
+      on (job_name, namespace) group_left(owner_name) max by (namespace, owner_name, job_name) (kube_job_owner{owner_kind="CronJob"})
+    )
+  ),
+  1
+)
+*
+on (namespace, job_name) group_left kube_job_status_failed ,
+  "cronjob", "$1", "owner_name", "(.+)"
+  )
+)
+
+
+ max(
+            kube_job_status_start_time
+            * ON(exported_job,job_name) GROUP_RIGHT()
+            kube_job_labels{job_name=~"helloworld.*"}
+          ) BY (exported_job,job_name)
+
+count(kube_job_status_failed{job="kube-state-metrics"}) by (namespace, job_name)
+      * on (namespace, job_name) group_left
+      count(kube_job_created{job="kube-state-metrics"}) by (namespace, job_name)
+      > 0.5
+
+
+ clamp_max(
+      (label_replace(
+      label_replace(
+        max(
+          kube_job_status_start_time
+          * ON(job_name,namespace) GROUP_RIGHT()
+          kube_job_owner{owner_name!=""}
+        )
+        BY (job_name, owner_name, namespace)
+        == ON(owner_name) GROUP_LEFT()
+        max(
+          kube_job_status_start_time
+          * ON(job_name,namespace) GROUP_RIGHT()
+          kube_job_owner{owner_name!=""}
+        )
+        BY (owner_name),
+      "job", "$1", "job_name", "(.+)"),
+    "cronjob", "$1", "owner_name", "(.+)")),1)
+      * ON(job) GROUP_LEFT()
+      label_replace(
+        label_replace(
+          (kube_job_status_failed != 0),
+          "job", "$1", "job_name", "(.+)"),
+        "cronjob", "$1", "owner_name", "(.+)")
+
+ k top pod  node-exporter-nmttc -n monitoring --containers
+ watch k top pod  node-exporter-nmttc -n monitoring --containers
+
+ ----------------------------
+ ".+nnn.+"
+"dddd.+"
+
+sum without(mode,cpu)(rate(node_cpu_seconds_total{mode!="idle"}[5m]))
+sum by (name)(container_cpu_usage_seconds_total)
+sum by (instance)(rate(container_cpu_usage_seconds_total{id=~"/docker/.+"}[5m]))
+sum by (release) (node_uname_info)
+sum without(fstype,mountpoint,device)(node_filesystem_size_bytes)
+count without(mode)(node_cpu_seconds_total)
+count without(cpu(count_without(mode()(node_cpu+seconds_total))))
+sum without(mode,cpu)(node_cpu_seconds_total{mode!="idle"})
+max(node_cpu_seconds_total{instance=~".+47.+",mode="idle"})
+bottomk(4,go_gc_duration_seconds_sum)
+topk(3,go_gc_duration_seconds_sum)
+count_values by (release)("instance",node_uname_info)
+node_memory_MemTotal_bytes/(1024^3)
+node_memory_MemTotal_bytes/1.0737e+9
+(node_memory_MemAvailable_bytes/node_memory_MemTotal_bytes)*100
+(1-(node_memory_MemAvailable_bytes/node_memory_MemTotal_bytes))*100
+(1-(node_memory_MemAvailable_bytes/node_memory_MemTotal_bytes))*100 >= 30
+(1-(node_memory_MemAvailable_bytes/node_memory_MemTotal_bytes))*100 >= bool 30
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
